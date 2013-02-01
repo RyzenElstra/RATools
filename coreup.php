@@ -70,7 +70,7 @@
      $data['svnRev'] = postgrab("svnrev");
     } else {
       $data['svnRev'] = '';
-    } 
+    }
     if (postgrab("tag")) {
       $data['tag'] = postgrab("tag");
     } else {
@@ -97,24 +97,9 @@
     } else {
       $data['targetDB'] = "Stage";
     }
-    if (postgrab("advisorInitials")) {
-      $data['advisorInitials'] = postgrab("advisorInitials");
-    } else {
-      $data['advisorInitials'] = "MAA";
-    }
-    if (postgrab("svnPassword")) {
-      $data['svnPassword'] = postgrab("svnpassword");
-    } else {
-      $data['svnPassword'] = "";
-    }
-    if (postgrab("svnUsername")) {
-      $data['svnUsername'] = postgrab("svnUsername");
-    } else {
-      $data['svnUsername'] = "acquia_ahsupport_melanderson";
-    }
-
+    include 'cat-config.php';
   }
-  
+
   ?>
 <pre>
 <?php // print_r($_POST); ?>
@@ -151,7 +136,7 @@
 
 <div id="branch">
    <fieldset>
-   <legend>Gather data</legend> 
+   <legend>Gather data</legend>
    <form name="input" action="<?php $_SERVER['PHP_SELF'] ?>#jump" method="post">
       <h2>Values</h2>
       <div id="one">
@@ -172,26 +157,26 @@
       </div>
       <p><input type="submit" name="standard" value="Submit"></p>
       </fieldset>
-      <?php if ($data['vcs'] == 'svn') : ?> 
+      <?php if ($data['vcs'] == 'svn') : ?>
         <fieldset class="svn">
         <legend>Create branch</legend>
         <h2>Checkout the repo</h2>
-        <p>cd ~melissa/www/ra <br />
+        <p>cd <?php echo $data['clientDirectory'] ?> <br />
         mkdir <?php echo $data['site']?> <br />
         cd <?php echo $data['site']?> <br />
-        <p>svn checkout --username <?php echo $data['svnUsername'] ?> --password <?php echo $data['svnPassword'] ?> \ <br /> 
+        <p>svn checkout --username <?php echo $data['svnUsername'] ?> --password <?php echo $data['svnPassword'] ?> \ <br />
         <em><?php echo $data["repo"]?>/<?php echo $data['sourceBranch'] ?></em></p>
         <p>ENTER REVISION NUMBER ABOVE</p>
         <p>cd <?php echo $data['sourceBranch'] ?></p>
 
         <h2>Create a branch</h2>
         <p>svn cp \ <br />
-        <?php echo $data["repo"]?>/<em><?php echo $data['sourceBranch']?></em> \ <br /> 
+        <?php echo $data["repo"]?>/<em><?php echo $data['sourceBranch']?></em> \ <br />
         <?php echo $data["repo"]?>/branches/<em><?php echo $data['targetBranch']; ?></em> \ <br />
         -m "<?php echo $data['advisorInitials']?>@acquia, Ticket #15066-<em><?php echo $data['ticket']?></em>: Branch from <?php echo $data['sourceBranch']?>
         to implement update from <em><?php echo $data['distro']?></em> <em><?php echo $data['sourceVersion'] ;?></em> to <em><?php echo $data["targetVersion"]?></em>." </p>
 
-        <p>svn switch ^/branches/<?php echo $data['targetBranch']. "\n";  ?></p>  
+        <p>svn switch ^/branches/<?php echo $data['targetBranch']. "\n";  ?></p>
         <p>cd docroot</p>
         <p>patch -p1 < ~melissa/patches/<?php echo(trim(strtolower($data['distro']))). "\n"; ?></p>
 
@@ -210,7 +195,7 @@
         <fieldset class="svn">
         <legend>Create branch</legend>
           <h2>Create a branch</h2>
-            <p>cd ~melissa/www/ra</p>
+            <p>cd <?php echo $data['clientDirectory'] ?></p>
             <p>git clone <?php echo $data['repo']; ?>
             <p>cd <?php echo $data['site']; ?></p>
             <p>git checkout -b <?php echo $data['targetBranch']; ?></p>
@@ -240,10 +225,10 @@ Deployed <?php echo $data['targetBranch']; ?> on <?php echo $data['targetDB'] . 
 Updated the DB
 
 The updated code is available at:
-<?php echo $data['testURL'] . "\r"; ?> 
+<?php echo $data['testURL'] . "\r"; ?>
 Please test and let me know if you see any issues.
 
-When I receive your approval, I will merge with <?php echo $data['sourceBranch']; ?>, create a tag, 
+When I receive your approval, I will merge with <?php echo $data['sourceBranch']; ?>, create a tag,
 refresh the DB from <?php echo $data['sourceDB']; ?> and ask you to test one more time before deploying to to production.
       </textarea><br />
         <label id="rev">Tag:</label> <input type="text" name="tag" value="<?php echo $data['tag']; ?>">
@@ -262,8 +247,8 @@ refresh the DB from <?php echo $data['sourceDB']; ?> and ask you to test one mor
           <p>svn merge ^/branches/<?php echo $data['targetBranch']; ?> -r<?php echo $data['svnRev']; ?>:HEAD</p>
           <p>svn commit -m "<?php echo $data['advisorInitials']; ?>@acquia, Ticket #15066-<?php echo $data['ticket']; ?>: Merged branches/<?php echo $data['targetBranch']; ?> to <?php echo $data['sourceBranch']; ?>" </p>
           <p>svn cp
-          <?php echo $data['repo']; ?>/<?php echo $data['sourceBranch']; ?> 
-          <?php echo $data['repo']; ?>/tags/<?php echo $data['tag']; ?> 
+          <?php echo $data['repo']; ?>/<?php echo $data['sourceBranch']; ?>
+          <?php echo $data['repo']; ?>/tags/<?php echo $data['tag']; ?>
           -m "<?php echo $data['advisorInitials']; ?>@acquia, Ticket #15066-<?php echo $data['ticket']; ?>: Tag to deploy <?php echo $data['sourceVersion']; ?> to <?php echo $data['targetVersion']; ?> update to production"</p>
       </fieldset>
     <?php endif; ?>
@@ -279,7 +264,7 @@ refresh the DB from <?php echo $data['sourceDB']; ?> and ask you to test one mor
         <p>git tag -a <?php echo $data['tag']; ?> -m "<?php echo $data['advisorInitials']; ?>@acquia, Ticket #15066-<?php echo $data['ticket']; ?>: Tag to deploy <?php echo $data['sourceVersion']; ?> to <?php echo $data['targetVersion']; ?> update to production"</p>
         <p>git push</p>
         <p>git push origin tag <?php echo $data['tag']; ?></p>
-      
+
       </fieldset>
     <?php endif; ?>
 
