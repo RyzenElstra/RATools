@@ -1,0 +1,51 @@
+body p {
+  font-size: 80%;
+}
+
+label {
+  display:block;
+  font-weight:bold;
+  text-align:right;
+  width: 150px;
+  float:left;
+}
+
+label#rev {
+  display: inline;
+  text-align: left;
+  width: auto;
+}
+
+div#one {
+  float:left;
+}
+
+div#one, div#two {
+  padding: 20px;
+  font-size: 70%;
+}
+
+h2 {
+  font-size: 100%;
+  border-bottom: 1px solid red;
+}
+
+fieldset {
+  background: #eee;
+  margin-bottom: 40px;
+  width: 80%;
+  float: left;
+}
+
+legend {
+  color: #fff;
+  background: #000;
+  font-size: 100%;
+  padding: 1%;
+  width: 250px;
+}
+
+div#branch {
+  float: left;
+}
+
