@@ -97,36 +97,7 @@
     } else {
       $data['targetDB'] = "Stage";
     }
-    // include 'catconfig.php';
-    if (postgrab("advisorInitials")) {
-      $data['advisorInitials'] = postgrab("advisorInitials");
-    } else {
-      $data['advisorInitials'] = "MGM";
-    }
-    /* Acquia SVN password.*/
-    if (postgrab("svnPassword")) {
-      $data['svnPassword'] = postgrab("svnpassword");
-    } else {
-      $data['svnPassword'] = "aTG57IBJOkZMias";
-    }
-    /* Acquia SVN username.*/
-    if (postgrab("svnUsername")) {
-      $data['svnUsername'] = postgrab("svnUsername");
-    } else {
-      $data['svnUsername'] = "acquia_ahsupport_mmcdowell";
-    }
-    /* Local path to location of all client folders */
-    if (postgrab("clientDirectory")) {
-      $data['clientDirectory'] = postgrab("clientDirectory");
-    } else {
-      $data['clientDirectory'] = "~/Sites/clients";
-    }
-    /* Local checkout path to https://github.com/acquiacat/Drupal-Core-Git-Patches */
-    if (postgrab("patchDirectory")) {
-      $data['patchDirectory'] = postgrab("patchDirectory");
-    } else {
-      $data['patchDirectory'] = "~/Sites/releases/version-patches";
-    }
+     include 'catconfig.php';
   }
 
   ?>
@@ -138,7 +109,7 @@
   <form name="load" action="<?php $_SERVER['PHP_SELF'] ?>" method="post" id="jsonform">
     <h2> JSON Values: </h2>
     <textarea name="loader" rows="20" cols="50">
-      <?php print json_encode($data, JSON_PRETTY_PRINT); ?>
+      <?php print json_encode($data); ?>
     </textarea>
     <br />
     <input type="submit" value="Insert values">
@@ -155,7 +126,7 @@
       <br />
       <form name="savefile" action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
       <input type="text" name="save" size="35" value="json_files/<?php echo join('-', array($data['site'], $data['ticket'], date('Ymd'))); ?>.json">
-      <input type="hidden" name="loader" value="<?php print htmlentities(json_encode($data, JSON_PRETTY_PRINT)); ?>">
+      <input type="hidden" name="loader" value="<?php print htmlentities(json_encode($data)); ?>">
       <br />
       <input type="submit" value="Save to file">
     <?php endif; ?>
