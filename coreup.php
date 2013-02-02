@@ -97,7 +97,36 @@
     } else {
       $data['targetDB'] = "Stage";
     }
-    include 'cat-config.php';
+    // include 'catconfig.php';
+    if (postgrab("advisorInitials")) {
+      $data['advisorInitials'] = postgrab("advisorInitials");
+    } else {
+      $data['advisorInitials'] = "MGM";
+    }
+    /* Acquia SVN password.*/
+    if (postgrab("svnPassword")) {
+      $data['svnPassword'] = postgrab("svnpassword");
+    } else {
+      $data['svnPassword'] = "aTG57IBJOkZMias";
+    }
+    /* Acquia SVN username.*/
+    if (postgrab("svnUsername")) {
+      $data['svnUsername'] = postgrab("svnUsername");
+    } else {
+      $data['svnUsername'] = "acquia_ahsupport_mmcdowell";
+    }
+    /* Local path to location of all client folders */
+    if (postgrab("clientDirectory")) {
+      $data['clientDirectory'] = postgrab("clientDirectory");
+    } else {
+      $data['clientDirectory'] = "~/Sites/clients";
+    }
+    /* Local checkout path to https://github.com/acquiacat/Drupal-Core-Git-Patches */
+    if (postgrab("patchDirectory")) {
+      $data['patchDirectory'] = postgrab("patchDirectory");
+    } else {
+      $data['patchDirectory'] = "~/Sites/releases/version-patches";
+    }
   }
 
   ?>
@@ -133,14 +162,13 @@
     </form>
 </div>
 
-
 <div id="branch">
    <fieldset>
    <legend>Gather data</legend>
    <form name="input" action="<?php $_SERVER['PHP_SELF'] ?>#jump" method="post">
       <h2>Values</h2>
       <div id="one">
-      <label>Ticket:</label> <input type="text" name="ticket" value="<?php echo $data['ticket']?>"><br />
+      <label>Ticket (15066-):</label> <input type="text" name="ticket" value="<?php echo $data['ticket']?>"><br />
       <label>Acquia Workflow:</label> <input type="text" name="acquiaworkflow" value="<?php echo $data['acquiaWorkflow']?>"> <a href="<?php echo $data['acquiaWorkflow']?>" target="_blank">Visit</a><br />
       <label>Repo URL:</label> <input type="text" name="repo" value="<?php echo $data['repo']?>"><br />
       <label>URL to test:</label> <input type="text" name="testurl" value="<?php echo $data['testURL']?>"> <a href="<?php echo $data['testURL']?>" target="_blank">Visit</a><br />
@@ -194,18 +222,25 @@
        <?php if ($data['vcs'] == 'git') : ?>
         <fieldset class="svn">
         <legend>Create branch</legend>
-          <h2>Create a branch</h2>
+          <h2>Create a repo for the first time</h2>
             <p>cd <?php echo $data['clientDirectory'] ?></p>
-            <p>git clone <?php echo $data['repo']; ?>
+            <p>mkdir <?php echo $data['site']; ?></p>
             <p>cd <?php echo $data['site']; ?></p>
+            <p>git clone <?php echo $data['repo']; ?></p>
+            <p>cd <?php echo $data['site']; ?></p>
+          <h2>Modify existing local repo</h2>
+            <p>cd <?php echo $data['clientDirectory'] ?>/<?php echo $data['site']; ?>/<?php echo $data['site']; ?></p>
+          <h2>Checkout a new branch</h2>
             <p>git checkout -b <?php echo $data['targetBranch']; ?></p>
             <p>cd docroot</p>
-            <p>patch -p1 < ~melissa/patches/<?php echo(trim(strtolower($data['distro']))). "\n"; ?></p>
+            <p>patch -p1
+                <?php echo $data['patchDirectory'] ?>/<?php echo(trim(strtolower($data['distro']))); ?>/<?php echo(trim(strtolower($data['distro']))); ?>-<?php echo $data['sourceVersion'] ?>_to_<?php echo $data['targetVersion'] ?>.patch
+            </p>
             <p>git status | grep rej</p>
             <p>git status | grep orig</p>
-            <p>cleanversion.sh</p>
+            <p><?php echo $data['patchDirectory'] ?>/scripts/rmv-versionnums-dpl.sh</p>
             <p>git add -A</p>
-            <p>git commit -m "<?php echo $data['advisorInitials']?>@acquia, Ticket #15066-<?php echo $data['ticket']?>: Update from <?php echo $data['distro'] ?> <?php echo $data['sourceVersion'] ?> to <?php echo $data['targetVersion'] ?>."</p>
+            <p>git commit -m "<?php echo $data['advisorInitials']?>@acquia, Ticket #15066-<?php echo $data['ticket']?>: Update from <?php echo $data['distro'] ?> <?php echo $data['sourceVersion'] ?>_to_<?php echo $data['targetVersion'] ?>."</p>
             <p>git push --set-upstream origin <?php echo $data['targetBranch'] ?></p>
           </fieldset>
         <?php endif; ?>
@@ -256,7 +291,7 @@ refresh the DB from <?php echo $data['sourceDB']; ?> and ask you to test one mor
     <?php if ($data['vcs'] == 'git') : ?>
       <fieldset class="git">
         <legend>Merge</legend>
-        <p>cd ~melissa/www/ra/<?php echo $data['site']; ?></p>
+        <p>cd <?php echo $data['clientDirectory'] ?>/<?php echo $data['site']; ?>/<?php echo $data['site']; ?></p>
         <p>git branch</p>
         <p>git checkout <?php echo $data['sourceBranch']; ?></p>
         <p>git pull</p>
