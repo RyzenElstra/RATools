@@ -21,7 +21,7 @@
   }
 
   if (isset($_POST['fileloader']) && !isset($_POST['loader'])) {
-    $filename = "json_files/" . $_POST['fileloader'];
+    $filename = $data['clientDirectory'] . '/logs/json_files/' . $_POST['fileloader'];
     $handle = fopen($filename, 'r');
     $_POST['loader'] = fread($handle, filesize($filename));
   }
@@ -124,7 +124,7 @@
     <?php if ($data['site'] && $data['ticket']) : ?>
       <br />
       <form name="savefile" action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
-      <input type="text" name="save" size="35" value="json_files/<?php echo join('-', array($data['site'], $data['ticket'], date('Ymd'))); ?>.json">
+      <input type="text" name="save" size="35" value="<?php echo $data['clientDirectory'] . '/logs/json_files/' . join('-', array($data['site'], $data['ticket'], date('Ymd'))); ?>.json">
       <input type="hidden" name="loader" value="<?php print htmlentities(json_encode($data, JSON_PRETTY_PRINT)); ?>">
       <br />
       <input type="submit" value="Save to file">

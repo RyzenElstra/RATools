@@ -16,13 +16,13 @@
     } else {
       $data['svnUsername'] = "acquia_ahsupport_SVNUSERNAME";
     }
-    /* Local path to location of all client folders ('~/Sites/clients') */
+    /* Local path to location of all client folders ('/Users/USERNAME/Sites/clients') */
     if (postgrab("clientDirectory")) {
       $data['clientDirectory'] = postgrab("clientDirectory");
     } else {
       $data['clientDirectory'] = "CLIENT_DIRECTORY";
     }
-    /* Local checkout path ('~/Sites/releases/version-patches') to clone of https://github.com/acquiacat/Drupal-Core-Git-Patches */
+    /* Local checkout path ('/Users/USERNAME/Sites/releases/version-patches') to clone of https://github.com/acquiacat/Drupal-Core-Git-Patches */
     if (postgrab("patchDirectory")) {
       $data['patchDirectory'] = postgrab("patchDirectory");
     } else {
