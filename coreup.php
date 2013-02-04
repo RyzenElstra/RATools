@@ -158,39 +158,33 @@
       <?php if ($data['vcs'] == 'svn') : ?>
         <fieldset class="svn">
         <legend>Create branch</legend>
-        <h2>Checkout the repo</h2>
-        <p>cd <?php echo $data['clientDirectory'] ?> <br />
-        mkdir <?php echo $data['site']?> <br />
-        cd <?php echo $data['site']?> <br />
-        <p>svn checkout --username <?php echo $data['svnUsername'] ?> --password <?php echo $data['svnPassword'] ?> \ <br />
-        <em><?php echo $data["repo"]?>/<?php echo $data['sourceBranch'] ?></em></p>
-        <p>ENTER REVISION NUMBER ABOVE</p>
-        <p>cd <?php echo $data['sourceBranch'] ?></p>
-
+          <h2>Checkout trunk for the first time</h2>
+            <p>cd <?php echo $data['clientDirectory'] ?></p>
+            <p>mkdir <?php echo $data['site']; ?></p>
+            <p>cd <?php echo $data['site']; ?></p>
+            <p>svn checkout --username <?php echo $data['svnUsername'] ?> --password <?php echo $data['svnPassword'] ?> <?php echo $data["repo"]?>/<?php echo $data['sourceBranch'] ?></p>
+            <p>ENTER REVISION NUMBER ABOVE</p>
+            <p>cd <?php echo $data['sourceBranch'] ?></p>
+          <h2>Modify existing local repo</h2>
+            <p>cd <?php echo $data['clientDirectory'] ?>/<?php echo $data['site']; ?>/<?php echo $data['site']; ?></p>
         <h2>Create a branch</h2>
-        <p>svn cp \ <br />
-        <?php echo $data["repo"]?>/<em><?php echo $data['sourceBranch']?></em> \ <br />
-        <?php echo $data["repo"]?>/branches/<em><?php echo $data['targetBranch']; ?></em> \ <br />
-        -m "<?php echo $data['advisorInitials']?>@acquia, Ticket #15066-<em><?php echo $data['ticket']?></em>: Branch from <?php echo $data['sourceBranch']?>
-        to implement update from <em><?php echo $data['distro']?></em> <em><?php echo $data['sourceVersion'] ;?></em> to <em><?php echo $data["targetVersion"]?></em>." </p>
-
-        <p>svn switch ^/branches/<?php echo $data['targetBranch']. "\n";  ?></p>
-        <p>cd docroot</p>
-        <p>patch -p1 < ~melissa/patches/<?php echo(trim(strtolower($data['distro']))). "\n"; ?></p>
-
-        <p>svn status --no-ignore | grep rej</p>
-
-        <p>svn status --no-ignore | grep orig</p>
-
-        <p>svn status | grep '\?' | awk '{print $2}' | xargs svn add</p>
-        <p>svn status | grep '\!' | awk '{print $2}' | xargs svn rm</p>
-        <p>cleanversion.sh</p>
-        <p>svn commit -m "<?php echo $data['advisorInitials'] ?>@acquia, Ticket #15066-<?php echo $data['ticket']?>: Update from <?php echo $data['distro'] ?> <?php echo $data['sourceVersion'] ?> to <?php echo $data['targetVersion'] ?>."
-  </p>
+          <p>svn cp <?php echo $data['repo']; ?>/<?php echo $data['sourceBranch']?>  <?php echo $data['repo']; ?>/branches/<?php echo $data['targetBranch']; ?> -m "<?php echo $data['advisorInitials']?>@acquia, Ticket #15066-<?php echo $data['ticket']?>: Branch from <?php echo $data['sourceBranch']?> to implement update from <?php echo $data['distro']?> <?php echo $data['sourceVersion'] ;?> to <?php echo $data["targetVersion"]?>." </p>
+          <p>svn switch ^/branches/<?php echo $data['targetBranch']. "\n";  ?></p>
+          <p>cd docroot</p>
+            <p>patch -p1
+                <?php echo $data['patchDirectory'] ?>/<?php echo(trim(strtolower($data['distro']))); ?>/<?php echo(trim(strtolower($data['distro']))); ?>-<?php echo $data['sourceVersion'] ?>_to_<?php echo $data['targetVersion'] ?>.patch</p>
+          <p>svn status --no-ignore | grep rej</p>
+          <p>svn status --no-ignore | grep orig</p>
+          <p>Make manual modifications as necessary.  Be sure to remove all *.rej and *.orig files when manual modifications are complete.</p>
+          <p>svn status | grep '\?' | awk '{print $2}' | xargs svn add</p>
+          <p>svn status | grep '\!' | awk '{print $2}' | xargs svn rm</p>
+            <p><?php echo $data['patchDirectory'] ?>/scripts/rmv-versionnums-dpl.sh</p>
+          <p>svn commit -m "<?php echo $data['advisorInitials'] ?>@acquia, Ticket #15066-<?php echo $data['ticket']?>: Update from <?php echo $data['distro'] ?> <?php echo $data['sourceVersion'] ?> to <?php echo $data['targetVersion'] ?>."
+    </p>
       </fieldset>
     <?php endif; ?>
        <?php if ($data['vcs'] == 'git') : ?>
-        <fieldset class="svn">
+        <fieldset class="git">
         <legend>Create branch</legend>
           <h2>Create a repo for the first time</h2>
             <p>cd <?php echo $data['clientDirectory'] ?></p>
@@ -204,13 +198,12 @@
             <p>git checkout -b <?php echo $data['targetBranch']; ?></p>
             <p>cd docroot</p>
             <p>patch -p1
-                <?php echo $data['patchDirectory'] ?>/<?php echo(trim(strtolower($data['distro']))); ?>/<?php echo(trim(strtolower($data['distro']))); ?>-<?php echo $data['sourceVersion'] ?>_to_<?php echo $data['targetVersion'] ?>.patch
-            </p>
+                <?php echo $data['patchDirectory'] ?>/<?php echo(trim(strtolower($data['distro']))); ?>/<?php echo(trim(strtolower($data['distro']))); ?>-<?php echo $data['sourceVersion'] ?>_to_<?php echo $data['targetVersion'] ?>.patch</p>
             <p>git status | grep rej</p>
             <p>git status | grep orig</p>
             <p><?php echo $data['patchDirectory'] ?>/scripts/rmv-versionnums-dpl.sh</p>
             <p>git add -A</p>
-            <p>git commit -m "<?php echo $data['advisorInitials']?>@acquia, Ticket #15066-<?php echo $data['ticket']?>: Update from <?php echo $data['distro'] ?> <?php echo $data['sourceVersion'] ?>_to_<?php echo $data['targetVersion'] ?>."</p>
+            <p>git commit -m "<?php echo $data['advisorInitials']?>@acquia, Ticket #15066-<?php echo $data['ticket']?>: Update from <?php echo $data['distro'] ?> <?php echo $data['sourceVersion'] ?> to <?php echo $data['targetVersion'] ?>."</p>
             <p>git push --set-upstream origin <?php echo $data['targetBranch'] ?></p>
           </fieldset>
         <?php endif; ?>
@@ -244,18 +237,18 @@ refresh the DB from <?php echo $data['sourceDB']; ?> and ask you to test one mor
     <?php if ($data['vcs'] == 'svn') : ?>
     <fieldset class="svn">
       <legend id="<?php echo $updatetag?>">Merge</legend>
-        <p>cd ~melissa/www/ra/<?php echo $data['site']; ?>/trunk</p>
-         <p>svn info</p>
-          <p>svn switch ^/<?php echo $data['sourceBranch']; ?></p>
-          <p>svn up</p>
-          <p>svn log -v -l 20 ^/branches/<?php echo $data['targetBranch']; ?>| grep "A /branch" </p>
-          <p>svn merge ^/branches/<?php echo $data['targetBranch']; ?> -r<?php echo $data['svnRev']; ?>:HEAD</p>
-          <p>svn commit -m "<?php echo $data['advisorInitials']; ?>@acquia, Ticket #15066-<?php echo $data['ticket']; ?>: Merged branches/<?php echo $data['targetBranch']; ?> to <?php echo $data['sourceBranch']; ?>" </p>
-          <p>svn cp
-          <?php echo $data['repo']; ?>/<?php echo $data['sourceBranch']; ?>
-          <?php echo $data['repo']; ?>/tags/<?php echo $data['tag']; ?>
-          -m "<?php echo $data['advisorInitials']; ?>@acquia, Ticket #15066-<?php echo $data['ticket']; ?>: Tag to deploy <?php echo $data['sourceVersion']; ?> to <?php echo $data['targetVersion']; ?> update to production"</p>
-      </fieldset>
+        <p>cd <?php echo $data['clientDirectory'] ?>/<?php echo $data['site']; ?>/trunk</p>
+        <p>svn info</p>
+        <p>svn switch ^/<?php echo $data['sourceBranch']; ?></p>
+        <p>svn up</p>
+        <p>svn log -v -l 20 ^/branches/<?php echo $data['targetBranch']; ?> | grep "A /branch" </p>
+        <p>svn merge ^/branches/<?php echo $data['targetBranch']; ?> -r<?php echo $data['svnRev']; ?>:HEAD</p>
+        <p>svn commit -m "<?php echo $data['advisorInitials']; ?>@acquia, Ticket #15066-<?php echo $data['ticket']; ?>: Merged branches/<?php echo $data['targetBranch']; ?> to <?php echo $data['sourceBranch']; ?>" </p>
+        <p>svn cp
+        <?php echo $data['repo']; ?>/<?php echo $data['sourceBranch']; ?>
+        <?php echo $data['repo']; ?>/tags/<?php echo $data['tag']; ?>
+        -m "<?php echo $data['advisorInitials']; ?>@acquia, Ticket #15066-<?php echo $data['ticket']; ?>: Tag to deploy <?php echo $data['sourceVersion']; ?> to <?php echo $data['targetVersion']; ?> update to production"</p>
+    </fieldset>
     <?php endif; ?>
 
     <?php if ($data['vcs'] == 'git') : ?>
