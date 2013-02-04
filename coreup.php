@@ -171,7 +171,7 @@
           <p>svn cp <?php echo $data['repo']; ?>/<?php echo $data['sourceBranch']?>  <?php echo $data['repo']; ?>/branches/<?php echo $data['targetBranch']; ?> -m "<?php echo $data['advisorInitials']?>@acquia, Ticket #15066-<?php echo $data['ticket']?>: Branch from <?php echo $data['sourceBranch']?> to implement update from <?php echo $data['distro']?> <?php echo $data['sourceVersion'] ;?> to <?php echo $data["targetVersion"]?>." </p>
           <p>svn switch ^/branches/<?php echo $data['targetBranch']. "\n";  ?></p>
           <p>cd docroot</p>
-            <p>patch -p1
+            <p>patch -p1 <
                 <?php echo $data['patchDirectory'] ?>/<?php echo(trim(strtolower($data['distro']))); ?>/<?php echo(trim(strtolower($data['distro']))); ?>-<?php echo $data['sourceVersion'] ?>_to_<?php echo $data['targetVersion'] ?>.patch</p>
           <p>svn status --no-ignore | grep rej</p>
           <p>svn status --no-ignore | grep orig</p>
@@ -197,7 +197,7 @@
           <h2>Checkout a new branch</h2>
             <p>git checkout -b <?php echo $data['targetBranch']; ?></p>
             <p>cd docroot</p>
-            <p>patch -p1
+            <p>patch -p1 <
                 <?php echo $data['patchDirectory'] ?>/<?php echo(trim(strtolower($data['distro']))); ?>/<?php echo(trim(strtolower($data['distro']))); ?>-<?php echo $data['sourceVersion'] ?>_to_<?php echo $data['targetVersion'] ?>.patch</p>
             <p>git status | grep rej</p>
             <p>git status | grep orig</p>
