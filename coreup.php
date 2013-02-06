@@ -142,11 +142,7 @@
      <h2> Save a Form: </h2>
       <form name="savefile" action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
       <input type="text" name="save" size="35" value="<?php echo $data['clientDirectory'] . '/logs/json_files/' . join('-', array($data['site'], $data['ticket'], date('Ymd'))); ?>.json">
-<<<<<<< HEAD
-      <input type="hidden" name="loader" value="<?php print htmlentities(json_encode($data, JSON_PRETTY_PRINT)); ?>">
-=======
       <input type="hidden" name="loader" value="<?php print htmlentities(json_encode($data)); ?>">
->>>>>>> MGM: removing pretty json.
       <br />
       <input type="submit" value="Save to file">
     <?php endif; ?>
