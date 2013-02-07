@@ -1,0 +1,8 @@
+To Do:
+
+Fix NOTES textarea:
+Currently on reload, notes field turns all line breaks into 'rn', makes run on sentences.
+1. once the file is loaded, change \r and \n to something else
+2. stripslashes($output) (which is what we added last time)
+3. capture the htmlentiteis() output of the textaera value ($myvariable = htmlentities($data['notes']) )
+4. convert the "something else" back to \r and \n (you can use str_replace() for that sort of thing)
